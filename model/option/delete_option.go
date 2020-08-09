@@ -7,9 +7,25 @@ type DeleteOption struct {
 }
 
 //AddExtendMapKV ...
-func (o *DeleteOption) AddExtendMapKV(k, v string) {
+func (o *DeleteOption) setExtendMapKV(k, v string) {
 	if o.ExtendMap == nil {
 		o.ExtendMap = make(map[string]string)
 	}
 	o.ExtendMap[k] = v
+}
+
+//NewDeleteOption ...
+func NewDeleteOption() *DeleteOption {
+	return &DeleteOption{}
+}
+
+//DeleteOpt ...
+type DeleteOpt func(o *DeleteOption) *DeleteOption
+
+//SetExtendMapDeleteOption ...
+func SetExtendMapDeleteOption(key, value string) DeleteOpt {
+	return func(o *DeleteOption) *DeleteOption {
+		o.setExtendMapKV(key, value)
+		return o
+	}
 }

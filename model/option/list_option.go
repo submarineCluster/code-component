@@ -18,6 +18,25 @@ type ListOption struct {
 	ExtendMap map[string]string `json:"extendMap,omitempty"`
 }
 
+//NewListOption ...
+func NewListOption() *ListOption {
+	return &ListOption{
+		FlagBit: 0,
+		Page: Page{
+			Limit:  10,
+			Offset: 0,
+		},
+		OrderByList: []OrderBy{
+			{
+				Field:       "id",
+				OrderByType: OrderByTypeDesc,
+			},
+		},
+		Filter:    nil,
+		ExtendMap: nil,
+	}
+}
+
 //Page ...
 type Page struct {
 	Limit  int64 `json:"limit"`
@@ -32,7 +51,7 @@ func (o *ListOption) setOffset(offset int64) {
 	o.Page.Offset = offset
 }
 
-func (o *ListOption) addExtendMapKV(k, v string) {
+func (o *ListOption) setExtendMapKV(k, v string) {
 	if o.ExtendMap == nil {
 		o.ExtendMap = make(map[string]string)
 	}
@@ -89,7 +108,7 @@ func OffsetListOption(offset int64) ListOpt {
 //SetExtendMapListOption ...
 func SetExtendMapListOption(key, value string) ListOpt {
 	return func(o *ListOption) *ListOption {
-		o.addExtendMapKV(key, value)
+		o.setExtendMapKV(key, value)
 		return o
 	}
 }
