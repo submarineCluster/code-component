@@ -5,7 +5,7 @@ type GetOption struct {
 	//FlagBit 标志位
 	FlagBit FlagBit `json:"flagBit,omitempty"`
 	// ExtendMap 拓展字段
-	ExtendMap map[string]string `json:"extendMap,omitempty"`
+	ExtendMap map[string]interface{} `json:"extendMap,omitempty"`
 }
 
 //FlagBit 标志位
@@ -24,9 +24,9 @@ func NewGetOption() *GetOption {
 	}
 }
 
-func (o *GetOption) setExtendMapKV(k, v string) {
+func (o *GetOption) setExtendMapKV(k string, v interface{}) {
 	if o.ExtendMap == nil {
-		o.ExtendMap = make(map[string]string)
+		o.ExtendMap = make(map[string]interface{})
 	}
 	o.ExtendMap[k] = v
 }
@@ -43,7 +43,7 @@ func WithDeleteGetOption() GetOpt {
 }
 
 //SetExtendMapGetOption ...
-func SetExtendMapGetOption(key, value string) GetOpt {
+func SetExtendMapGetOption(key string, value interface{}) GetOpt {
 	return func(o *GetOption) *GetOption {
 		o.setExtendMapKV(key, value)
 		return o

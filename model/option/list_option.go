@@ -15,7 +15,7 @@ type ListOption struct {
 	Filter []string `json:"filter,omitempty"`
 
 	// ExtendMap 拓展字段
-	ExtendMap map[string]string `json:"extendMap,omitempty"`
+	ExtendMap map[string]interface{} `json:"extendMap,omitempty"`
 }
 
 //NewListOption ...
@@ -51,9 +51,9 @@ func (o *ListOption) setOffset(offset int64) {
 	o.Page.Offset = offset
 }
 
-func (o *ListOption) setExtendMapKV(k, v string) {
+func (o *ListOption) setExtendMapKV(k string, v interface{}) {
 	if o.ExtendMap == nil {
-		o.ExtendMap = make(map[string]string)
+		o.ExtendMap = make(map[string]interface{})
 	}
 	o.ExtendMap[k] = v
 }
@@ -106,7 +106,7 @@ func OffsetListOption(offset int64) ListOpt {
 }
 
 //SetExtendMapListOption ...
-func SetExtendMapListOption(key, value string) ListOpt {
+func SetExtendMapListOption(key string, value interface{}) ListOpt {
 	return func(o *ListOption) *ListOption {
 		o.setExtendMapKV(key, value)
 		return o
