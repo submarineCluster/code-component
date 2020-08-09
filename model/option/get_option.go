@@ -23,3 +23,14 @@ func (o *GetOption) AddExtendMapKV(k, v string) {
 	}
 	o.ExtendMap[k] = v
 }
+
+//GetOpt ...
+type GetOpt func(o *GetOption) *GetOption
+
+//WithDeleteGetOption ...
+func WithDeleteGetOption() GetOpt {
+	return func(o *GetOption) *GetOption {
+		o.FlagBit |= DeleteFlagBit
+		return o
+	}
+}

@@ -24,18 +24,15 @@ type Page struct {
 	Offset int64 `json:"offset"`
 }
 
-//SetLimit ...
-func (o *ListOption) SetLimit(limit int64) {
+func (o *ListOption) setLimit(limit int64) {
 	o.Page.Limit = limit
 }
 
-//SetOffset ...
-func (o *ListOption) SetOffset(offset int64) {
+func (o *ListOption) setOffset(offset int64) {
 	o.Page.Offset = offset
 }
 
-//AddExtendMapKV ...
-func (o *ListOption) AddExtendMapKV(k, v string) {
+func (o *ListOption) addExtendMapKV(k, v string) {
 	if o.ExtendMap == nil {
 		o.ExtendMap = make(map[string]string)
 	}
@@ -60,4 +57,39 @@ const (
 //SetOrderBy ...
 func (o *ListOption) SetOrderBy(by OrderBy) {
 	o.OrderByList = append(o.OrderByList, by)
+}
+
+//ListOpt ...
+type ListOpt func(o *ListOption) *ListOption
+
+//WithDeleteListOption ...
+func WithDeleteListOption() ListOpt {
+	return func(o *ListOption) *ListOption {
+		o.FlagBit |= DeleteFlagBit
+		return o
+	}
+}
+
+//LimitListOption ...
+func LimitListOption(limit int64) ListOpt {
+	return func(o *ListOption) *ListOption {
+		o.setLimit(limit)
+		return o
+	}
+}
+
+//OffsetListOption ...
+func OffsetListOption(offset int64) ListOpt {
+	return func(o *ListOption) *ListOption {
+		o.setOffset(offset)
+		return o
+	}
+}
+
+//SetExtendMapListOption ...
+func SetExtendMapListOption(key, value string) ListOpt {
+	return func(o *ListOption) *ListOption {
+		o.addExtendMapKV(key, value)
+		return o
+	}
 }
