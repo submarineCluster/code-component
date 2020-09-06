@@ -19,8 +19,8 @@ type ListOption struct {
 }
 
 //NewListOption ...
-func NewListOption() *ListOption {
-	return &ListOption{
+func NewListOption(opts ...ListOpt) *ListOption {
+	o := &ListOption{
 		FlagBit: 0,
 		Page: Page{
 			Limit:  10,
@@ -35,6 +35,11 @@ func NewListOption() *ListOption {
 		Filter:    nil,
 		ExtendMap: nil,
 	}
+
+	for _, opt := range opts {
+		o = opt(o)
+	}
+	return o
 }
 
 //Page ...
