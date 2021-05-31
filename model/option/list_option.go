@@ -209,3 +209,32 @@ func DBModelFilterExtendMap(dbModel *gorm.DB, option *ListOption) (*gorm.DB, err
 
 	return dbModel, nil
 }
+
+//FieldMap ...
+func FieldMap(exported string, extendMap map[string]string) string {
+	if extendMap != nil {
+		result, ok := extendMap[exported]
+		if ok {
+			return result
+		}
+	}
+	result, ok := fieldMap[exported]
+	if ok {
+		return result
+	}
+	return ""
+}
+
+var (
+	// fieldMap 查询字段映射
+	fieldMap = map[string]string{
+		"id":              "id",
+		"name":            "name",
+		"createTimestamp": "create_timestamp",
+		"title":           "title",
+		"creator":         "creator",
+		"modifyTimestamp": "modify_time_stamp",
+		"modifier":        "modifier",
+		"deleteTimestamp": "delete_timestamp",
+	}
+)
