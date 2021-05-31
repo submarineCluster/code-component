@@ -19,7 +19,7 @@ type ObjectMeta struct {
 	Creator int64 `json:"creator" db:"creator" bson:"creator" gorm:"column:creator"`
 
 	// ModifyTimeStamp 资源更新时间戳
-	ModifyTimeStamp int64 `json:"modifyTimeStamp" db:"modify_time_stamp" bson:"modify_time_stamp"gorm:"column:modify_time_stamp"`
+	ModifyTimestamp int64 `json:"modifyTimestamp" db:"modify_timestamp" bson:"modify_timestamp"gorm:"column:modify_timestamp"`
 
 	// Modifier 更新人ID
 	Modifier int64 `json:"modifier" db:"modifier" bson:"modifier" gorm:"column:modifier"`

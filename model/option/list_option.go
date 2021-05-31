@@ -225,16 +225,28 @@ func FieldMap(exported string, extendMap map[string]string) string {
 	return ""
 }
 
+//GetFieldMap ...
+func GetFieldMap(extendMap map[string]string) map[string]string {
+	result := map[string]string{}
+	for key, value := range fieldMap {
+		result[key] = value
+	}
+	for key, value := range extendMap {
+		result[key] = value
+	}
+	return result
+}
+
 var (
 	// fieldMap 查询字段映射
 	fieldMap = map[string]string{
 		"id":              "id",
 		"name":            "name",
-		"createTimestamp": "create_timestamp",
 		"title":           "title",
 		"creator":         "creator",
-		"modifyTimestamp": "modify_time_stamp",
 		"modifier":        "modifier",
+		"modifyTimestamp": "modify_timestamp",
+		"createTimestamp": "create_timestamp",
 		"deleteTimestamp": "delete_timestamp",
 	}
 )
