@@ -1,3 +1,3 @@
-module git.code.oa.com/leoshli/code-component
+module git.code.oa.com/tencent_abtest/go-common/code-components
 
-go 1.14
+go 1.15
