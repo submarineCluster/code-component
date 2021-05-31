@@ -13,6 +13,8 @@ type FlagBit uint16
 
 const (
 	//NormalFlagBit FlagBit = 0
+
+	// DeleteFlagBit 删除数据
 	DeleteFlagBit FlagBit = 1 << iota // 包含被删除数据
 )
 

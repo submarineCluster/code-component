@@ -1,5 +1,13 @@
 package option
 
+import (
+	"fmt"
+	"strings"
+
+	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
+)
+
 //ListOption list操作通用配置项
 type ListOption struct {
 
@@ -116,4 +124,88 @@ func SetExtendMapListOption(key string, value interface{}) ListOpt {
 		o.setExtendMapKV(key, value)
 		return o
 	}
+}
+
+//SettingDBModel 配置 dbModel
+func SettingDBModel(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
+	if option == nil || dbModel == nil {
+		return nil, errors.Errorf("invalid option")
+	}
+
+	var err error
+	for _, f := range DBModelFilterHandlerFactory {
+		dbModel, err = f(dbModel, option)
+		if err != nil {
+			return nil, errors.Wrapf(err, "filter")
+		}
+	}
+	return dbModel, nil
+}
+
+//DBModelFilterHandler ...
+type DBModelFilterHandler func(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error)
+
+var (
+	//DBModelFilterHandlerFactory ...
+	DBModelFilterHandlerFactory = []DBModelFilterHandler{
+		DBModelFilterFlagBit,
+		DBModelFilterPage,
+		DBModelFilterOrderBy,
+		DBModelFilterFieldList,
+		DBModelFilterExtendMap,
+	}
+)
+
+//DBModelFilterFlagBit ...
+func DBModelFilterFlagBit(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
+	if option.FlagBit&DeleteFlagBit > 0 {
+		dbModel = dbModel.Where("delete_timestamp > ?", 0)
+	}
+	return dbModel, nil
+}
+
+//DBModelFilterPage ...
+func DBModelFilterPage(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
+
+	if option.Page.Limit > 0 {
+		dbModel = dbModel.Limit(option.Page.Limit)
+	}
+
+	if option.Page.Offset >= 0 {
+		dbModel = dbModel.Offset(option.Page.Offset)
+	}
+
+	return dbModel, nil
+}
+
+//DBModelFilterOrderBy ...
+func DBModelFilterOrderBy(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
+
+	for _, ob := range option.OrderByList {
+		dbModel = dbModel.Order(fmt.Sprintf("%v %v", ob.Field, ob.OrderByType))
+	}
+
+	return dbModel, nil
+}
+
+//DBModelFilterFieldList ...
+func DBModelFilterFieldList(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
+
+	if len(option.Filter) > 0 {
+		dbModel = dbModel.Select(strings.Join(option.Filter, ","))
+	}
+
+	return dbModel, nil
+}
+
+//DBModelFilterExtendMap ...
+func DBModelFilterExtendMap(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
+
+	if len(option.ExtendMap) > 0 {
+		for key, value := range option.ExtendMap {
+			dbModel = dbModel.Where(fmt.Sprintf("%v = %v", key, value))
+		}
+	}
+
+	return dbModel, nil
 }
