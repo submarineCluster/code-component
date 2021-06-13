@@ -6,6 +6,8 @@ type ObjectMeta struct {
 	// ID 唯一标识
 	ID ID `json:"id" db:"id" bson:"id" gorm:"column:id"`
 
+	Code Code `json:"code" db:"code" bson:"code" gorm:"column:code"`
+
 	// Name 资源标识 eg: user, role, company etc
 	Name Name `json:"name" db:"name" bson:"name" gorm:"column:name"`
 
@@ -26,6 +28,15 @@ type ObjectMeta struct {
 
 	// DeleteTimestamp 删除时间，零值标识未删除
 	DeleteTimestamp int64 `json:"deleteTimestamp" db:"delete_timestamp" bson:"delete_timestamp" gorm:"column:delete_timestamp"`
+
+	// Isolation 资源隔离标识 默认隔离业务ID appID 例如 {"5608":""}
+	Isolation map[string]string `json:"isolation" db:"isolation" bson:"isolation" gorm:"column:isolation"`
+
+	// Labels 资源标签标识
+	Labels map[string]string `json:"labels" db:"labels" bson:"labels" gorm:"column:labels"`
+
+	// Annotations 附加信息
+	Annotations map[string]string `json:"annotations" db:"annotations" bson:"annotations" gorm:"column:annotations"`
 }
 
 //ListMeta ...

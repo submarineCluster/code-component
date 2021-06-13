@@ -15,6 +15,19 @@ func (id ID) String() string {
 	return strconv.FormatInt(int64(id), 10)
 }
 
+//Code code of object
+type Code string
+
+// String ...
+func (c Code) String() string {
+	return string(c)
+}
+
+//IsZero ...
+func (c Code) IsZero() bool {
+	return len(c.String()) == 0
+}
+
 //Name name of object
 type Name string
 
