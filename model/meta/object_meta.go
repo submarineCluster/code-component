@@ -15,14 +15,14 @@ type ObjectMeta struct {
 	// CreateTimestamp 资源创建时间戳
 	CreateTimestamp int64 `json:"createTimestamp" db:"create_timestamp" bson:"create_timestamp" gorm:"column:create_timestamp"`
 
-	// Creator 创建人ID
-	Creator int64 `json:"creator" db:"creator" bson:"creator" gorm:"column:creator"`
+	// Creator 创建人Name
+	Creator string `json:"creator" db:"creator" bson:"creator" gorm:"column:creator"`
 
 	// ModifyTimeStamp 资源更新时间戳
 	ModifyTimestamp int64 `json:"modifyTimestamp" db:"modify_timestamp" bson:"modify_timestamp"gorm:"column:modify_timestamp"`
 
-	// Modifier 更新人ID
-	Modifier int64 `json:"modifier" db:"modifier" bson:"modifier" gorm:"column:modifier"`
+	// Modifier 更新人Name
+	Modifier string `json:"modifier" db:"modifier" bson:"modifier" gorm:"column:modifier"`
 
 	// DeleteTimestamp 删除时间，零值标识未删除
 	DeleteTimestamp int64 `json:"deleteTimestamp" db:"delete_timestamp" bson:"delete_timestamp" gorm:"column:delete_timestamp"`
