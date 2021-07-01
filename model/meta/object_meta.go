@@ -6,12 +6,10 @@ type ObjectMeta struct {
 	// ID 唯一标识
 	ID ID `json:"id" db:"id" bson:"id" gorm:"column:id"`
 
-	Code Code `json:"code" db:"code" bson:"code" gorm:"column:code"`
-
-	// Name 资源标识 eg: user, role, company etc
+	// Name 英文名 如果对象是User name 为用户的唯一字符串标识 如 leoshli
 	Name Name `json:"name" db:"name" bson:"name" gorm:"column:name"`
 
-	// Title 资源中文名 eg: 用户\角色\公司 等
+	// Title 资源中文名 如果对象是User 则Title 例： 李少辉
 	Title string `json:"title" db:"title" bson:"title" gorm:"column:title"`
 
 	// CreateTimestamp 资源创建时间戳
