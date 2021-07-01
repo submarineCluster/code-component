@@ -15,6 +15,11 @@ func (id ID) String() string {
 	return strconv.FormatInt(int64(id), 10)
 }
 
+//Int64 ...
+func (id ID) Int64() int64 {
+	return int64(id)
+}
+
 //Code code of object
 type Code string
 
