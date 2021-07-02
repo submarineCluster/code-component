@@ -2,10 +2,9 @@ package option
 
 import (
 	"fmt"
-	"strings"
 
-	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
+	"gorm.io/gorm"
 )
 
 //ListOption list操作通用配置项
@@ -20,10 +19,31 @@ type ListOption struct {
 	OrderByList []OrderBy `json:"sort,omitempty"`
 
 	// Filter 只返回指定的字段，filter 为空则全部返回
-	Filter []string `json:"filter,omitempty"`
+	Filter map[string]string `json:"filter,omitempty"`
 
 	// ExtendMap 拓展字段
 	ExtendMap map[string]interface{} `json:"extendMap,omitempty"`
+}
+
+//Operator 操作符
+type Operator string
+
+// const ...
+const (
+	LtOperator    Operator = "<"
+	LteOperator   Operator = "<="
+	EqualOperator Operator = "="
+	GtOperator    Operator = ">"
+	GteOperator   Operator = ">="
+	InOperator    Operator = "in"
+	NotInOperator Operator = "not in"
+	LikeOperator  Operator = "like"
+)
+
+//FilterItem ...
+type FilterItem struct {
+	Operator Operator `json:"operator"`
+	Value    string   `json:"value"`
 }
 
 //NewListOption ...
@@ -151,7 +171,6 @@ var (
 		DBModelFilterFlagBit,
 		DBModelFilterPage,
 		DBModelFilterOrderBy,
-		DBModelFilterFieldList,
 		DBModelFilterExtendMap,
 	}
 )
@@ -168,11 +187,11 @@ func DBModelFilterFlagBit(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error
 func DBModelFilterPage(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 
 	if option.Page.Limit > 0 {
-		dbModel = dbModel.Limit(option.Page.Limit)
+		dbModel = dbModel.Limit(int(option.Page.Limit))
 	}
 
 	if option.Page.Offset >= 0 {
-		dbModel = dbModel.Offset(option.Page.Offset)
+		dbModel = dbModel.Offset(int(option.Page.Offset))
 	}
 
 	return dbModel, nil
@@ -183,16 +202,6 @@ func DBModelFilterOrderBy(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error
 
 	for _, ob := range option.OrderByList {
 		dbModel = dbModel.Order(fmt.Sprintf("%v %v", ob.Field, ob.OrderByType))
-	}
-
-	return dbModel, nil
-}
-
-//DBModelFilterFieldList ...
-func DBModelFilterFieldList(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
-
-	if len(option.Filter) > 0 {
-		dbModel = dbModel.Select(strings.Join(option.Filter, ","))
 	}
 
 	return dbModel, nil

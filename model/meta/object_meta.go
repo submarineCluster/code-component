@@ -28,13 +28,13 @@ type ObjectMeta struct {
 	DeleteTimestamp int64 `json:"deleteTimestamp" db:"delete_timestamp" bson:"delete_timestamp" gorm:"column:delete_timestamp"`
 
 	// Namespace 资源隔离标识 默认隔离业务ID appID 例如 {"businessCode":["5608","6666"]} 标识对象所属空间 用户拥有5608 6666的空间
-	Namespace map[NamespaceKey][]string `json:"namespace" db:"namespace" bson:"namespace" gorm:"column:namespace"`
+	Namespace Namespace `json:"namespace" db:"namespace" bson:"namespace" gorm:"column:namespace"`
 
 	// Labels 资源标签标识
-	Labels map[string]string `json:"labels" db:"labels" bson:"labels" gorm:"column:labels"`
+	Labels KV `json:"labels" db:"labels" bson:"labels" gorm:"column:labels"`
 
 	// Annotations 附加信息
-	Annotations map[string]string `json:"annotations" db:"annotations" bson:"annotations" gorm:"column:annotations"`
+	Annotations KV `json:"annotations" db:"annotations" bson:"annotations" gorm:"column:annotations"`
 }
 
 //ListMeta ...
