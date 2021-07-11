@@ -24,6 +24,9 @@ type ObjectMeta struct {
 	// Modifier 更新人Name
 	Modifier string `json:"modifier" db:"modifier" bson:"modifier" gorm:"column:modifier"`
 
+	// Comment 备注
+	Comment string `json:"comment" db:"comment" bson:"comment" gorm:"column:comment"`
+
 	// DeleteTimestamp 删除时间，零值标识未删除
 	DeleteTimestamp int64 `json:"deleteTimestamp" db:"delete_timestamp" bson:"delete_timestamp" gorm:"column:delete_timestamp"`
 

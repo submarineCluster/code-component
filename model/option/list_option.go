@@ -18,10 +18,13 @@ type ListOption struct {
 	// OrderByList 排序
 	OrderByList []OrderBy `json:"sort,omitempty"`
 
-	// Filter 只返回指定的字段，filter 为空则全部返回
-	Filter map[string]string `json:"filter,omitempty"`
+	// Filter 只返回指定的字段，Selector 为空则全部返回 TODO 还没支持
+	Selector []string `json:"selector,omitempty"`
 
-	// ExtendMap 拓展字段
+	// Filter 过滤条件
+	Filter map[string]FilterItem `json:"filter,omitempty"`
+
+	// ExtendMap 拓展字段 保留
 	ExtendMap map[string]interface{} `json:"extendMap,omitempty"`
 }
 
@@ -146,6 +149,14 @@ func SetExtendMapListOption(key string, value interface{}) ListOpt {
 	}
 }
 
+//SetSelectorListOption 筛选字段
+func SetSelectorListOption(key ...string) ListOpt {
+	return func(o *ListOption) *ListOption {
+		o.Selector = append(o.Selector, key...)
+		return o
+	}
+}
+
 //SettingDBModel 配置 dbModel
 func SettingDBModel(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 	if option == nil || dbModel == nil {
@@ -171,7 +182,7 @@ var (
 		DBModelFilterFlagBit,
 		DBModelFilterPage,
 		DBModelFilterOrderBy,
-		DBModelFilterExtendMap,
+		DBModelFilter,
 	}
 )
 
@@ -207,12 +218,12 @@ func DBModelFilterOrderBy(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error
 	return dbModel, nil
 }
 
-//DBModelFilterExtendMap ...
-func DBModelFilterExtendMap(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
+//DBModelFilter ...
+func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 
 	if len(option.ExtendMap) > 0 {
-		for key, value := range option.ExtendMap {
-			dbModel = dbModel.Where(fmt.Sprintf("%v = %v", key, value))
+		for key, value := range option.Filter {
+			dbModel = dbModel.Where(fmt.Sprintf("%v %v %v", key, value.Operator, value.Value))
 		}
 	}
 
