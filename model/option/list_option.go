@@ -231,10 +231,16 @@ func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 
 	if len(option.Filter) > 0 {
 		for key, value := range option.Filter {
-			dbModel = dbModel.Where(fmt.Sprintf("%v %v %v", key, value.Operator, value.Value))
+			if len(key) == 0 {
+				continue
+			}
+			if len(value.Value) == 0 {
+				dbModel = dbModel.Where(fmt.Sprintf(`%v %v ""`, key, value.Operator))
+				continue
+			}
+			dbModel = dbModel.Where(fmt.Sprintf(`%v %v %v`, key, value.Operator, value.Value))
 		}
 	}
-
 	return dbModel, nil
 }
 
