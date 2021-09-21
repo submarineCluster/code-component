@@ -125,16 +125,16 @@ func WithDeleteListOption() ListOpt {
 	}
 }
 
-//LimitListOption ...
-func LimitListOption(limit int64) ListOpt {
+//WithLimitListOption ...
+func WithLimitListOption(limit int64) ListOpt {
 	return func(o *ListOption) *ListOption {
 		o.setLimit(limit)
 		return o
 	}
 }
 
-//OffsetListOption ...
-func OffsetListOption(offset int64) ListOpt {
+//WithOffsetListOption ...
+func WithOffsetListOption(offset int64) ListOpt {
 	return func(o *ListOption) *ListOption {
 		o.setOffset(offset)
 		return o
@@ -153,6 +153,14 @@ func SetExtendMapListOption(key string, value interface{}) ListOpt {
 func SetSelectorListOption(key ...string) ListOpt {
 	return func(o *ListOption) *ListOption {
 		o.Selector = append(o.Selector, key...)
+		return o
+	}
+}
+
+//WithFilterListOption 设置查询条件
+func WithFilterListOption(filter map[string]FilterItem) ListOpt {
+	return func(o *ListOption) *ListOption {
+		o.Filter = filter
 		return o
 	}
 }

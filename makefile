@@ -12,3 +12,4 @@ all: .format
 	goimports -w .
 	golint ./...
 	go-xray -d .
+	go-imports
