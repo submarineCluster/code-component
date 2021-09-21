@@ -229,7 +229,7 @@ func DBModelFilterOrderBy(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error
 //DBModelFilter ...
 func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 
-	if len(option.ExtendMap) > 0 {
+	if len(option.Filter) > 0 {
 		for key, value := range option.Filter {
 			dbModel = dbModel.Where(fmt.Sprintf("%v %v %v", key, value.Operator, value.Value))
 		}
