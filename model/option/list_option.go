@@ -2,6 +2,8 @@ package option
 
 import (
 	"fmt"
+	"strings"
+	"unicode"
 
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
@@ -234,6 +236,7 @@ func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 			if len(key) == 0 {
 				continue
 			}
+			key = canonicalKey(key)
 			if len(value.Value) == 0 {
 				dbModel = dbModel.Where(fmt.Sprintf(`%v %v ""`, key, value.Operator))
 				continue
@@ -242,6 +245,26 @@ func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 		}
 	}
 	return dbModel, nil
+}
+
+func canonicalKey(key string) string {
+	return underscoreName(key)
+}
+
+func underscoreName(name string) string {
+	buffer := strings.Builder{}
+	for i, r := range name {
+		if unicode.IsUpper(r) {
+			if i != 0 {
+				buffer.WriteString("_")
+			}
+			buffer.WriteString(strings.ToLower(string(r)))
+		} else {
+			buffer.WriteRune(r)
+		}
+	}
+
+	return buffer.String()
 }
 
 //FieldMap ...
