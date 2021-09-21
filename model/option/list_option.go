@@ -188,9 +188,9 @@ var (
 	//DBModelFilterHandlerFactory ...
 	DBModelFilterHandlerFactory = []DBModelFilterHandler{
 		DBModelFilterFlagBit,
-		DBModelFilterPage,
-		DBModelFilterOrderBy,
 		DBModelFilter,
+		DBModelFilterOrderBy,
+		DBModelFilterPage,
 	}
 )
 
