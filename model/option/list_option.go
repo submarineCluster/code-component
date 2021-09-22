@@ -5,6 +5,7 @@ import (
 	"strings"
 	"unicode"
 
+	"git.code.oa.com/trpcprotocol/tab/common"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -24,31 +25,10 @@ type ListOption struct {
 	Selector []string `json:"selector,omitempty"`
 
 	// Filter 过滤条件
-	Filter map[string]FilterItem `json:"filter,omitempty"`
+	Filter map[string]common.FilterItem `json:"filter,omitempty"`
 
 	// ExtendMap 拓展字段 保留
 	ExtendMap map[string]interface{} `json:"extendMap,omitempty"`
-}
-
-//Operator 操作符
-type Operator string
-
-// const ...
-const (
-	LtOperator    Operator = "<"
-	LteOperator   Operator = "<="
-	EqualOperator Operator = "="
-	GtOperator    Operator = ">"
-	GteOperator   Operator = ">="
-	InOperator    Operator = "in"
-	NotInOperator Operator = "not in"
-	LikeOperator  Operator = "like"
-)
-
-//FilterItem ...
-type FilterItem struct {
-	Operator Operator `json:"operator"`
-	Value    string   `json:"value"`
 }
 
 //NewListOption ...
