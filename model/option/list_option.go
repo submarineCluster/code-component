@@ -218,13 +218,36 @@ func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 			}
 			key = canonicalKey(key)
 			if len(value.Value) == 0 {
-				dbModel = dbModel.Where(fmt.Sprintf(`%v %v ""`, key, value.Operator))
+				dbModel = dbModel.Where(fmt.Sprintf(`%v %v ""`, key, operator(value.Operator)))
 				continue
 			}
-			dbModel = dbModel.Where(fmt.Sprintf(`%v %v %v`, key, value.Operator, value.Value))
+			dbModel = dbModel.Where(fmt.Sprintf(`%v %v %v`, key, operator(value.Operator), value.Value))
 		}
 	}
 	return dbModel, nil
+}
+
+func operator(o common.Operator) string {
+	switch o {
+	case common.Operator_EQUAL:
+		return "="
+	case common.Operator_LT:
+		return "<"
+	case common.Operator_LTE:
+		return "<="
+	case common.Operator_GT:
+		return ">"
+	case common.Operator_GTE:
+		return ">="
+	case common.Operator_IN:
+		return "in"
+	case common.Operator_NOT_IN:
+		return "not in"
+	case common.Operator_LIKE:
+		return "like"
+	default:
+		return "="
+	}
 }
 
 func canonicalKey(key string) string {
