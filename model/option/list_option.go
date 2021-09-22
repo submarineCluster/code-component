@@ -25,7 +25,7 @@ type ListOption struct {
 	Selector []string `json:"selector,omitempty"`
 
 	// Filter 过滤条件
-	Filter map[string]common.FilterItem `json:"filter,omitempty"`
+	Filter map[string]*common.FilterItem `json:"filter,omitempty"`
 
 	// ExtendMap 拓展字段 保留
 	ExtendMap map[string]interface{} `json:"extendMap,omitempty"`
@@ -140,7 +140,7 @@ func SetSelectorListOption(key ...string) ListOpt {
 }
 
 //WithFilterListOption 设置查询条件
-func WithFilterListOption(filter map[string]FilterItem) ListOpt {
+func WithFilterListOption(filter map[string]*common.FilterItem) ListOpt {
 	return func(o *ListOption) *ListOption {
 		o.Filter = filter
 		return o
