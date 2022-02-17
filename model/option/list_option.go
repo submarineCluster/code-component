@@ -147,6 +147,17 @@ func WithFilterListOption(filter map[string]*common.FilterItem) ListOpt {
 	}
 }
 
+//WithFilterEntryListOption 设置单个查询条件
+func WithFilterEntryListOption(key string, value *common.FilterItem) ListOpt {
+	return func(o *ListOption) *ListOption {
+		if o.Filter == nil {
+			o.Filter = make(map[string]*common.FilterItem)
+		}
+		o.Filter[key] = value
+		return o
+	}
+}
+
 //SettingDBModel 配置 dbModel
 func SettingDBModel(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 	if option == nil || dbModel == nil {
