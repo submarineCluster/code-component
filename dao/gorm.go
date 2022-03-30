@@ -41,9 +41,9 @@ func OffsetOption(offset int64) Opt {
 }
 
 // WhereQueryOption where
-func WhereQueryOption(k interface{}, value interface{}) Opt {
+func WhereQueryOption(k interface{}, value ...interface{}) Opt {
 	return func(db *gorm.DB) *gorm.DB {
-		return db.Where(k, value)
+		return db.Where(k, value...)
 	}
 }
 
