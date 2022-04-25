@@ -81,3 +81,10 @@ func RawQueryOption(sql string, values ...interface{}) Opt {
 		return db.Raw(sql, values...)
 	}
 }
+
+// CountOption 计数
+func CountOption(recordCount *int64) Opt {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Count(recordCount)
+	}
+}
