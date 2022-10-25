@@ -232,7 +232,16 @@ func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 				dbModel = dbModel.Where(fmt.Sprintf(`%v %v ""`, key, operator(value.Operator)))
 				continue
 			}
-			dbModel = dbModel.Where(fmt.Sprintf(`%v %v %v`, key, operator(value.Operator), value.Value))
+			switch value.Operator {
+			case common.Operator_Between:
+				valueList := strings.Split(value.Value, ";")
+				if len(valueList) != 2 { // 错误的数据 忽略
+					continue
+				}
+				dbModel = dbModel.Where(fmt.Sprintf(`%v <= %v and %v <= %v`, valueList[0], key, key, valueList[1]))
+			default:
+				dbModel = dbModel.Where(fmt.Sprintf(`%v %v %v`, key, operator(value.Operator), value.Value))
+			}
 		}
 	}
 	return dbModel, nil
