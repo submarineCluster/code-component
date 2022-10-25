@@ -235,8 +235,8 @@ func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 			switch value.Operator {
 			case common.Operator_Between:
 				valueList := strings.Split(value.Value, ";")
-				if len(valueList) != 2 { // 错误的数据 忽略
-					continue
+				if len(valueList) != 2 { // 错误的数据
+					return dbModel, errors.Errorf("invalid between-value:%v", value.Value)
 				}
 				dbModel = dbModel.Where(fmt.Sprintf(`%v <= %v and %v <= %v`, valueList[0], key, key, valueList[1]))
 			default:
