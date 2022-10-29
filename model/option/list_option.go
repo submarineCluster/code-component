@@ -265,6 +265,10 @@ func operator(o common.Operator) string {
 		return "not in"
 	case common.Operator_LIKE:
 		return "like"
+	case common.Operator_IS:
+		return "is"
+	case common.Operator_NE:
+		return "!="
 	default:
 		return "="
 	}
