@@ -3,9 +3,8 @@ package meta
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"go/types"
-
 	"github.com/pkg/errors"
+	"go/types"
 )
 
 //Namespace ...
@@ -86,4 +85,41 @@ func (kv KV) Value() (driver.Value, error) {
 		return []byte(""), nil
 	}
 	return json.Marshal(kv)
+}
+
+type StringSlice []string
+
+func (s *StringSlice) Scan(src interface{}) error {
+	var body []byte
+	switch v := src.(type) {
+	case string:
+		if len(v) == 0 {
+			return nil
+		}
+		body = []byte(v)
+	case []byte:
+		if len(v) == 0 {
+			return nil
+		}
+		body = v
+	case types.Nil:
+		return nil
+	default:
+		return nil
+	}
+
+	result := StringSlice{}
+	err := json.Unmarshal(body, &result)
+	if err != nil {
+		return errors.Wrapf(err, "json Unmarshal fail")
+	}
+	*s = result
+	return nil
+}
+
+func (s StringSlice) Value() (driver.Value, error) {
+	if len(s) == 0 {
+		return nil, nil
+	}
+	return json.Marshal(s)
 }
