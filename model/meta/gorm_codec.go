@@ -3,8 +3,9 @@ package meta
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"github.com/pkg/errors"
 	"go/types"
+
+	"github.com/pkg/errors"
 )
 
 //Namespace ...
