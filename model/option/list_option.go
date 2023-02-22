@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode"
 
-	"git.code.oa.com/trpcprotocol/tab/common"
+	"git.woa.com/trpcprotocol/tab/common"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
