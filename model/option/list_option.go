@@ -241,7 +241,7 @@ func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 				dbModel = dbModel.Where(fmt.Sprintf(`%v <= %v and %v <= %v`, valueList[0], key, key, valueList[1]))
 			default:
 				//dbModel = dbModel.Where(fmt.Sprintf(`%v %v %v`, key, operator(value.Operator), value.Value))
-				dbModel = dbModel.Where("? ? ?", key, operator(value.Operator), value.Value)
+				dbModel = dbModel.Where(fmt.Sprintf(`%v %v ?`, key, operator(value.Operator)), value.Value)
 			}
 		}
 	}
