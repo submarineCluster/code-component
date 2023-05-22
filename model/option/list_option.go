@@ -238,9 +238,12 @@ func DBModelFilter(dbModel *gorm.DB, option *ListOption) (*gorm.DB, error) {
 				if len(valueList) != 2 { // 错误的数据
 					return dbModel, errors.Errorf("invalid between-value:%v", value.Value)
 				}
+				dbModel = dbModel.Where(fmt.Sprintf(`? <= %v and %v <= ?`, key, key), valueList[0], valueList[1])
 				dbModel = dbModel.Where(fmt.Sprintf(`%v <= %v and %v <= %v`, valueList[0], key, key, valueList[1]))
-			case common.Operator_NOT_IN:
-				dbModel = dbModel.Where(fmt.Sprintf(`%v %v %v`, key, operator(value.Operator), value.Value))
+			case common.Operator_NOT_IN, common.Operator_IN:
+				// 检查 value
+				itemList := strings.Split(strings.Trim(value.Value, `()"'`), ",")
+				dbModel = dbModel.Where(fmt.Sprintf(`%v %v ?`, key, operator(value.Operator)), itemList)
 			default:
 				//dbModel = dbModel.Where(fmt.Sprintf(`%v %v %v`, key, operator(value.Operator), value.Value))
 				dbModel = dbModel.Where(fmt.Sprintf(`%v %v ?`, key, operator(value.Operator)), value.Value)
